@@ -1,6 +1,6 @@
-# Data
+# data/
 
-The datasets are not included in this repo due to size. This file explains where to get them and how to organize them.
+The datasets are not in the repo. This file explains where to get them and where to put them.
 
 ---
 
@@ -8,15 +8,12 @@ The datasets are not included in this repo due to size. This file explains where
 
 Download from the [Canadian Institute for Cybersecurity](https://www.unb.ca/cic/datasets/).
 
-We use the pre-extracted CSV features, not the raw pcaps. Each capture produces two CSV files:
+We use the pre-extracted CSV files, not the raw pcaps. Each capture produces two files: one with per-query features (`stateless_*.csv`) and one with per-session features (`stateful_*.csv`).
 
-- `stateless_*.csv` — per-query features (one row per DNS query)
-- `stateful_*.csv` — per-session features (one row per session, aligned with stateless)
-
-The notebook expects this folder structure on Google Drive:
+Put the data on Google Drive at `MyDrive/Tunnel/CSV_CIC21/` with this layout:
 
 ```
-MyDrive/Tunnel/CSV_CIC21/
+CSV_CIC21/
 ├── Attack_Light_Benign/
 │   ├── Attacks/
 │   │   ├── stateless_features-light_audio.pcap.csv
@@ -57,21 +54,21 @@ MyDrive/Tunnel/CSV_CIC21/
         └── stateful_features-benign_heavy_3.pcap.csv
 ```
 
-Total: ~140,000 flows (attacks + benign, light + heavy load).
+Total: ~140,000 flows.
 
 ---
 
-## Mutant Payload (ARAGAT)
+## Mutant Payload
 
-Generated using the [ARAGAT](https://github.com/DNS-Datasets/ARAGAT) tool. ARAGAT replays iodine tunnel sessions with different payload types (audio, image, text, video, exe, compressed) across multiple random seeds.
+Generated with [ARAGAT](https://github.com/DNS-Datasets/ARAGAT). ARAGAT replays iodine sessions with different payload types across random seeds.
 
-The notebook expects the generated CSVs here:
+Put the generated CSVs at `MyDrive/Tunnel/CSV_CIC21/CSV_Generated/`:
 
 ```
-MyDrive/Tunnel/CSV_CIC21/CSV_Generated/
-├── stateless_features-bridge.pcap_10.csv   ← seed 10
+CSV_Generated/
+├── stateless_features-bridge.pcap_10.csv
 ├── stateful_features-bridge.pcap_10.csv
-├── stateless_features-bridge.pcap_21.csv   ← seed 21
+├── stateless_features-bridge.pcap_21.csv
 ├── stateful_features-bridge.pcap_21.csv
 ├── stateless_features-bridge.pcap_35.csv
 ├── stateful_features-bridge.pcap_35.csv
@@ -89,43 +86,16 @@ MyDrive/Tunnel/CSV_CIC21/CSV_Generated/
 └── stateful_features-bridge.pcap_99.csv
 ```
 
-Seeds used: 10, 21, 35, 42, 55, 60, 75, 82, 99 (9 seeds total, 7,548 attack flows).
+Seeds used: 10, 21, 35, 42, 55, 60, 75, 82, 99. Total: 7,548 attack flows.
 
 ---
 
-## GraphTunnel (Experiment 5 only)
+## GraphTunnel
 
-The notebook clones this automatically. No manual setup needed.
+Only needed for Experiment 5. The notebook clones it automatically — no manual setup.
 
 Source: [https://github.com/DNS-Datasets/GraphTunnel](https://github.com/DNS-Datasets/GraphTunnel)
 
-Tools used from this dataset: dns2tcp, dnspot, tcp-over-dns-CNAME, tcp-over-dns-TXT, DNS-shell, cobalstrike, ozymandns, tuns.
+Tools we evaluate from this dataset: dns2tcp, dnspot, tcp-over-dns-CNAME, tcp-over-dns-TXT, DNS-shell, cobalstrike, ozymandns, tuns.
 
-Tools excluded (already in CIC-2021): iodine, dnscat2, AndIodine.
-
----
-
-## Saved models
-
-After running Experiment 1, the notebook saves trained models to:
-
-```
-MyDrive/Tunnel/CSV_CIC21/
-├── Models_SOTA_Hybrid/
-│   ├── LogisticRegression_sota.joblib
-│   ├── RandomForest_sota.joblib
-│   ├── XGBoost_sota.joblib
-│   ├── LightGBM_sota.joblib
-│   ├── CNN_sota.keras
-│   ├── LSTM_sota.keras
-│   └── scaler_sota.joblib
-└── Models_Hardened/
-    ├── LogisticRegression_hardened.joblib
-    ├── RandomForest_hardened.joblib
-    ├── XGBoost_hardened.joblib
-    ├── LightGBM_hardened.joblib
-    ├── CNN_hardened.keras
-    └── LSTM_hardened.keras
-```
-
-Experiments 2–5 load models from these folders, so Experiments 1 and 4 must run first.
+Tools we skip (already in CIC-2021): iodine, dnscat2, AndIodine.

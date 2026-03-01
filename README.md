@@ -1,134 +1,89 @@
 # DNS Tunnel Robustness
 
-Code and experiments for the paper:
-
-> **Simple Payload Mutations Break Machine Learning Based DNS Tunneling Detection**
-> Reynier Leyva La O, Carlos A. Catania
+Code for the paper **"Simple Payload Mutations Break Machine Learning Based DNS Tunneling Detection"**
+by Reynier Leyva La O and Carlos A. Catania.
 
 ---
 
-## What this is about
+## The problem
 
-DNS tunneling detectors are usually trained and tested on the same type of traffic.
-The question we asked is: *what happens when the attacker changes the payload?*
+DNS tunnel detectors are trained on specific captures and then tested on captures from the same session. That works fine on paper, but it breaks as soon as the attacker changes what they put inside the tunnel.
 
-Not changing the tool, not changing the protocol — just changing what gets encoded inside the DNS queries (audio vs image vs text vs compressed data).
+We tested this with iodine. We kept the tool, the protocol, and the setup exactly the same. We only changed the payload type — audio, image, text, video, executable, compressed. Models that got 98% recall on the original captures dropped to zero.
 
-The answer: most models break completely.
-
-Then we fixed it.
-
----
-
-## Key results
-
-**Experiment 2 — What happens when the payload mutates**
-
-| Model | Baseline recall | After mutation |
+| Model | CIC-2021 recall | After payload mutation |
 |---|---|---|
-| RandomForest | 98.5% | **0.0%** |
-| XGBoost | 98.5% | **0.0%** |
-| LightGBM | 98.5% | **0.0%** |
-| LSTM | 93.5% | **1.8%** |
+| RandomForest | 98.5% | 0.0% |
+| XGBoost | 98.5% | 0.0% |
+| LightGBM | 98.5% | 0.0% |
+| LSTM | 93.5% | 1.8% |
 | CNN | 93.5% | 29.9% |
 | LogisticRegression | 94.7% | 45.2% |
 
-Tree-based models, which usually dominate benchmarks, fail entirely. LR does better — not because it's smarter, but because its linear boundary happens to be more stable.
+We then looked at why. The benign traffic distribution barely matters (changing it drops recall by at most 0.24 percentage points). The attack mutation is the issue.
 
-**Experiment 3 — Why it breaks**
+## The fix
 
-We split the problem into two parts: does the model fail because the *benign traffic changed*, or because the *attack changed*?
+We retrained each model with a small amount of mutated samples added to the training set — 3.47% of the total data. That was enough to get 100% recall on mutated payloads while keeping performance on the original test set.
 
-Answer: the attack mutation is the cause. Changing the benign traffic alone barely affects recall (≤0.24 pp drop). Mutating the attack payload drops recall by up to 99 pp.
+The hardened models also worked on tunneling tools they had never seen before (dns2tcp, dnspot, cobalstrike, tuns, and others from the GraphTunnel dataset). The models were trained on iodine and dnscat2. The fact that they transfer suggests the mutation training captures something general about tunneling behavior, not just iodine's specific patterns.
 
-**Experiment 4 — Hardening**
-
-We retrained each model adding a small amount of mutant payload samples to the training set (3.47% of the total). That was enough to recover 100% recall on mutant payloads while keeping performance on the original CIC-2021 test set.
-
-**Experiment 5 — Transfer to unknown tools**
-
-We then tested the hardened models on 8 DNS tunneling tools they had never seen — not iodine, not dnscat2, but dns2tcp, dnspot, cobalstrike, ozymandns, tuns, tcp-over-dns-CNAME, tcp-over-dns-TXT, and DNS-shell.
-
-| Model | Baseline recall | Hardened recall |
+| Model | Recall on unknown tools (baseline) | Recall on unknown tools (hardened) |
 |---|---|---|
 | RandomForest | 1.3% | 89.8% |
 | XGBoost | 0.0% | 91.1% |
 | LightGBM | 0.0% | 65.0% |
 | LSTM | 44.9% | 100.0% |
-| CNN | 0.0% | 100.0%* |
-
-*CNN hardened reaches 100% recall but also 100% FPR — it flags everything as attack. LSTM hardened is the best balance (100% recall, 21.5% FPR).
 
 ---
 
-## What's in this repo
+## Repo structure
 
 ```
-├── experiments.ipynb   — all experiments end to end (Colab)
-├── requirements.txt    — Python dependencies
-└── data/
-    └── README.md       — dataset structure and how to get the data
+notebooks/      main experiment notebook (runs on Google Colab)
+src/            standalone Python scripts for figures and stats
+data/           instructions for getting and organizing the datasets
+models/         where trained models go after running the notebook
+results/        CSV outputs from the experiments
+figures/        paper figures
 ```
-
-The notebook runs on Google Colab with data on Google Drive.
-Trained models are not included because of size, but the notebook trains everything from scratch.
 
 ---
 
-## How to run
+## Setup
 
-**1. Get the data**
+The notebook runs on Google Colab with data on Google Drive. You need three things:
 
-You need two datasets:
+**CIC Bell DNS 2021** — from the [Canadian Institute for Cybersecurity](https://www.unb.ca/cic/datasets/). We use the pre-extracted CSV features, not the raw pcaps. See `data/README.md` for the expected folder layout.
 
-- **CIC Bell DNS 2021** — available from the [Canadian Institute for Cybersecurity](https://www.unb.ca/cic/datasets/). We use the pre-extracted CSV features (stateless + stateful), not the raw pcaps.
-- **Mutant Payload (ARAGAT-generated)** — generated using the ARAGAT tool. See `data/README.md` for the expected folder structure.
-- **GraphTunnel** — used in Experiment 5. The notebook clones it automatically from [DNS-Datasets/GraphTunnel](https://github.com/DNS-Datasets/GraphTunnel).
+**Mutant Payload** — generated with [ARAGAT](https://github.com/DNS-Datasets/ARAGAT). We ran it with 9 random seeds (10, 21, 35, 42, 55, 60, 75, 82, 99), producing 7,548 attack flows.
 
-**2. Set up Google Drive**
+**GraphTunnel** — only needed for Experiment 5. The notebook clones it automatically from [DNS-Datasets/GraphTunnel](https://github.com/DNS-Datasets/GraphTunnel).
 
-Put the data in your Google Drive at:
-```
-MyDrive/Tunnel/
-├── CSV_CIC21/              ← CIC-2021 features
-│   ├── Attack_Light_Benign/
-│   ├── Attack_heavy_Benign/
-│   ├── Models_SOTA_Hybrid/ ← saved baseline models (created by Exp 1)
-│   └── Models_Hardened/    ← saved hardened models (created by Exp 4)
-└── CSV_Generated/          ← ARAGAT mutant payload CSVs
-```
+Once you have the data on Drive, open the notebook and run the cells in order. Experiment 1 trains and saves the baseline models, which the later experiments load.
 
-**3. Open the notebook in Colab**
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rleyva-la/Dns-Tunnel-Robustness/blob/main/experiments.ipynb)
-
-Run the cells in order. Experiment 1 trains and saves the baseline models, so it needs to run before Experiments 2–5.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rleyva-la/Dns-Tunnel-Robustness/blob/main/notebooks/experiments.ipynb)
 
 ---
 
-## Features used
+## Features
 
-23 features total, extracted per DNS flow:
+23 features per flow, split into two groups:
 
-**Stateless (11)** — computed per query:
-`FQDN_count`, `subdomain_length`, `upper`, `lower`, `numeric`, `entropy`, `special`, `labels`, `labels_max`, `labels_average`, `len`
+**Stateless (11)** — extracted per DNS query: `FQDN_count`, `subdomain_length`, `upper`, `lower`, `numeric`, `entropy`, `special`, `labels`, `labels_max`, `labels_average`, `len`
 
-**Stateful (12)** — computed over the session:
-`rr`, `A_frequency`, `AAAA_frequency`, `CNAME_frequency`, `TXT_frequency`, `MX_frequency`, `NS_frequency`, `NULL_frequency`, `rr_count`, `distinct_ip`, `unique_ttl`, `total_queries`
+**Stateful (12)** — extracted per session: `rr`, `A_frequency`, `AAAA_frequency`, `CNAME_frequency`, `TXT_frequency`, `MX_frequency`, `NS_frequency`, `NULL_frequency`, `rr_count`, `distinct_ip`, `unique_ttl`, `total_queries`
 
 ---
 
 ## Citation
 
-If you use this code or find the results useful, please cite:
-
 ```bibtex
 @article{leyva2025dns,
   title={Simple Payload Mutations Break Machine Learning Based DNS Tunneling Detection},
   author={Leyva La O, Reynier and Catania, Carlos A.},
-  journal={},
   year={2025}
 }
 ```
 
-*(BibTeX will be updated once the paper is published.)*
+BibTeX will be updated once the paper is published.
