@@ -58,9 +58,9 @@ Total: ~140,000 flows.
 
 ---
 
-## Mutant Payload
+## Perturbed Payload
 
-Generated with [ARAGAT](https://github.com/DNS-Datasets/ARAGAT). ARAGAT replays iodine sessions with different payload types across random seeds.
+Generated with [perturbed-dns](https://github.com/reypapin/perturbed-dns), a DNS tunnel tool with 4-dimensional structural perturbations (metadata position, encoding, chunking, and timing).
 
 Put the generated CSVs at `MyDrive/Tunnel/CSV_CIC21/CSV_Generated/`:
 
@@ -86,13 +86,13 @@ CSV_Generated/
 └── stateful_features-bridge.pcap_99.csv
 ```
 
-Seeds used: 10, 21, 35, 42, 55, 60, 75, 82, 99. Total: 7,548 attack flows.
+Seeds used: 10, 21, 35, 42, 55, 60, 75, 82, 99. Total: 7,548 attack flows across nine independent runs.
 
 ---
 
 ## GraphTunnel
 
-Only needed for Experiment 5. The notebook clones it automatically — no manual setup.
+Only needed for Experiment 4. The notebook clones it automatically — no manual setup.
 
 Source: [https://github.com/DNS-Datasets/GraphTunnel](https://github.com/DNS-Datasets/GraphTunnel)
 
