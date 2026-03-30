@@ -1,7 +1,0 @@
-EXPERIMENT 3: DEFENSE HARDENING SUMMARY
-==================================================
-
-Average Recovery Improvement: 58.79%
-Average Stability Loss: 0.00%
-Models with Positive Recovery: 5/6
-Best Trade-off Model: RandomForest
