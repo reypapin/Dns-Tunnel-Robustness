@@ -1,0 +1,7 @@
+model,top1_feature,category_top1,positional_in_top10,stateful_in_top10,recall
+RandomForest,rr,Stateful,7,3,0.0000
+XGBoost,A_frequency,Stateful,7,3,0.0000
+LightGBM,entropy,Positional,8,2,0.0000
+LSTM,labels_average,Positional,7,3,0.0180
+CNN,len,Positional,5,5,0.2985
+LogisticRegression,subdomain_length,Positional,7,3,0.4518

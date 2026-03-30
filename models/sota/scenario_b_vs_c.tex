@@ -1,0 +1,21 @@
+\begin{table}[t]
+  \centering
+  \caption{Statistical significance of recall drop from
+  Scenario~B (standard CIC-2021 attack, bootstrap $n{=}9$)
+  to Scenario~C (Mutant Payload, $n{=}9$ seeds).
+  Paired $t$-test; $\dagger$indeterminate (zero variance).
+  $^{***}p{<}0.001$.}
+  \label{tab:scenario_bc}
+  \begin{tabular}{lcccccc}
+  \toprule
+  \textbf{Model} & $\overline{r}_B$ & $\overline{r}_C$ & $\Delta r$ & $t$ & $p$-value & $d$ \\
+  \midrule
+  RandomForest & 0.9979 & 0.0055 & $+0.9924$ & $677.63$ & $<0.0001^{***}$ & $+225.88$ \\
+  XGBoost & 0.9990 & 0.0000 & $+0.9990$ & $3156.83$ & $<0.0001^{***}$ & $+1052.28$ \\
+  LightGBM & 0.9900 & 0.0000 & $+0.9900$ & $1464.79$ & $<0.0001^{***}$ & $+488.26$ \\
+  LogReg & 0.9900 & 0.4528 & $+0.5372$ & $99.45$ & $<0.0001^{***}$ & $+33.15$ \\
+  CNN & 0.7722 & 0.2984 & $+0.4738$ & $77.92$ & $<0.0001^{***}$ & $+25.97$ \\
+  LSTM & 0.1182 & 0.0180 & $+0.1003$ & $29.10$ & $<0.0001^{***}$ & $+9.70$ \\
+  \bottomrule
+  \end{tabular}
+\end{table}

@@ -1,0 +1,29 @@
+\begin{table}[t]
+  \centering
+  \caption{Top-10 features ranked by Random Forest importance.
+  Values show mean~$\pm$~std. Negative permutation importance
+  (CNN/LSTM) indicates the feature acts as noise for that model.
+  \textsuperscript{$\dagger$}Std between individual trees.
+  \textsuperscript{$\ddagger$}Std from $n{=}5$ permutation repeats.}
+  \label{tab:feature_importance}
+  \resizebox{\columnwidth}{!}{%
+  \begin{tabular}{llcccc}
+  \toprule
+  \textbf{Feature} & \textbf{Cat.} & \textbf{RF\textsuperscript{$\dagger$}} & \textbf{CNN\textsuperscript{$\ddagger$}} & \textbf{LSTM\textsuperscript{$\ddagger$}} & \textbf{LogReg $|\beta|$} \\
+  \midrule
+  \texttt{rr} & Sta. & $0.2415{\pm}0.2693$ & 0.0000 & $-0.0029{\pm}0.0037$ & 2.4105 \\
+  \texttt{A\_frequency} & Sta. & $0.2147{\pm}0.2487$ & $-0.0037{\pm}0.0006$ & $-0.0031{\pm}0.0038$ & 2.4105 \\
+  \midrule
+  \texttt{FQDN\_count} & Pos. & $0.0934{\pm}0.1764$ & $0.0272{\pm}0.0056$ & $-0.0483{\pm}0.0162$ & 1.4046 \\
+  \texttt{special} & Pos. & $0.0881{\pm}0.1726$ & $-0.0077{\pm}0.0048$ & $-0.0172{\pm}0.0118$ & 2.2188 \\
+  \texttt{subdomain\_length} & Pos. & $0.0657{\pm}0.1403$ & $0.0548{\pm}0.0072$ & $0.0226{\pm}0.0075$ & 4.1455 \\
+  \midrule
+  \texttt{rr\_count} & Sta. & $0.0632{\pm}0.1126$ & $0.0360{\pm}0.0074$ & $-0.0075{\pm}0.0001$ & 1.2045 \\
+  \midrule
+  \texttt{numeric} & Pos. & $0.0605{\pm}0.1427$ & $0.0566{\pm}0.0030$ & $0.0361{\pm}0.0036$ & 1.6750 \\
+  \texttt{labels} & Pos. & $0.0572{\pm}0.1321$ & $-0.0100{\pm}0.0022$ & $-0.0029{\pm}0.0050$ & 0.3654 \\
+  \texttt{labels\_average} & Pos. & $0.0350{\pm}0.0958$ & $-0.0013{\pm}0.0038$ & $0.0404{\pm}0.0031$ & 0.4328 \\
+  \texttt{lower} & Pos. & $0.0332{\pm}0.0698$ & $0.0271{\pm}0.0049$ & $0.0328{\pm}0.0056$ & 1.8631 \\
+  \bottomrule
+  \end{tabular}}
+  \end{table}

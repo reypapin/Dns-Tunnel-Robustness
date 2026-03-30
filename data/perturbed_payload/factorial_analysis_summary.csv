@@ -1,0 +1,17 @@
+config,position,encoding,chunking,timing,present,count
+baseline|baseline|baseline|baseline,baseline,baseline,baseline,baseline,True,11
+baseline|baseline|baseline|mutated,baseline,baseline,baseline,mutated,True,18
+baseline|baseline|mutated|baseline,baseline,baseline,mutated,baseline,True,36
+baseline|baseline|mutated|mutated,baseline,baseline,mutated,mutated,True,78
+baseline|mutated|baseline|baseline,baseline,mutated,baseline,baseline,True,34
+baseline|mutated|baseline|mutated,baseline,mutated,baseline,mutated,True,64
+baseline|mutated|mutated|baseline,baseline,mutated,mutated,baseline,True,98
+baseline|mutated|mutated|mutated,baseline,mutated,mutated,mutated,True,165
+mutated|baseline|baseline|baseline,mutated,baseline,baseline,baseline,True,63
+mutated|baseline|baseline|mutated,mutated,baseline,baseline,mutated,True,119
+mutated|baseline|mutated|baseline,mutated,baseline,mutated,baseline,True,123
+mutated|baseline|mutated|mutated,mutated,baseline,mutated,mutated,True,219
+mutated|mutated|baseline|baseline,mutated,mutated,baseline,baseline,True,145
+mutated|mutated|baseline|mutated,mutated,mutated,baseline,mutated,True,284
+mutated|mutated|mutated|baseline,mutated,mutated,mutated,baseline,True,282
+mutated|mutated|mutated|mutated,mutated,mutated,mutated,mutated,True,553

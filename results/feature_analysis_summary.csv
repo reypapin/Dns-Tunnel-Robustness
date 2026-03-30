@@ -1,0 +1,7 @@
+model,top1_feature,type,positional_in_top10,robust_in_top10,recall
+RandomForest,rr,🟢,3,3,0.8475
+XGBoost,A_frequency,🟢,5,3,0.8475
+LightGBM,entropy,🔴,5,2,0.8475
+CNN,AAAA_frequency,🟢,3,6,0.8520
+LSTM,subdomain_length,🔴,4,3,0.8593
+LogisticRegression,subdomain_length,🔴,4,3,0.9201

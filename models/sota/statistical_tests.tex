@@ -1,0 +1,30 @@
+\begin{table}[t]
+  \centering
+  \caption{Pairwise paired $t$-tests on per-seed recall
+  ($n=9$ seeds, Mutant Payload).
+  $^{*}p{<}0.05$, $^{**}p{<}0.01$, $^{***}p{<}0.001$, ns: not significant.}
+  Cohen's~$d$ for paired differences: small $|d|{<}0.5$,
+  medium $0.5{\le}|d|{<}0.8$, large $|d|{\ge}0.8$.}
+  \label{tab:stat_tests}
+  \begin{tabular}{llcccc}
+  \toprule
+  \textbf{Model A} & \textbf{Model B} & $\overline{r}_A$ & $\overline{r}_B$ & $p$-value & Cohen's~$d$ \\
+  \midrule
+  RandomForest & XGBoost & 0.0055 & 0.0000 & $0.0018^{**}$ & $+1.52$ \\
+  RandomForest & LightGBM & 0.0055 & 0.0000 & $0.0018^{**}$ & $+1.52$ \\
+  RandomForest & LogReg & 0.0055 & 0.4528 & $<0.0001^{***}$ & $-38.14$ \\
+  RandomForest & CNN & 0.0055 & 0.2984 & $<0.0001^{***}$ & $-17.74$ \\
+  RandomForest & LSTM & 0.0055 & 0.0180 & $0.0003^{***}$ & $-2.06$ \\
+  XGBoost & LightGBM & 0.0000 & 0.0000 & \multicolumn{1}{c}{---\textsuperscript{$\dagger$}} & $+0.00$ \\
+  XGBoost & LogReg & 0.0000 & 0.4528 & $<0.0001^{***}$ & $-30.67$ \\
+  XGBoost & CNN & 0.0000 & 0.2984 & $<0.0001^{***}$ & $-18.35$ \\
+  XGBoost & LSTM & 0.0000 & 0.0180 & $<0.0001^{***}$ & $-4.40$ \\
+  LightGBM & LogReg & 0.0000 & 0.4528 & $<0.0001^{***}$ & $-30.67$ \\
+  LightGBM & CNN & 0.0000 & 0.2984 & $<0.0001^{***}$ & $-18.35$ \\
+  LightGBM & LSTM & 0.0000 & 0.0180 & $<0.0001^{***}$ & $-4.40$ \\
+  LogReg & CNN & 0.4528 & 0.2984 & $<0.0001^{***}$ & $+6.59$ \\
+  LogReg & LSTM & 0.4528 & 0.0180 & $<0.0001^{***}$ & $+26.51$ \\
+  CNN & LSTM & 0.2984 & 0.0180 & $<0.0001^{***}$ & $+14.51$ \\
+  \bottomrule
+  \end{tabular}
+\end{table}
